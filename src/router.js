@@ -25,15 +25,21 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   switch (to.name) {
     case "home":
-      if (localStorage.getItem("user") && localStorage.getItem("authorization")) {
-        next("/minhaconta")
+      if (
+        localStorage.getItem("user") &&
+        localStorage.getItem("authorization")
+      ) {
+        next("/minhaconta");
       }
       break;
     case "account":
-      if (!localStorage.getItem("user") || !localStorage.getItem("authorization")) {
-        next("/")
+      if (
+        !localStorage.getItem("user") ||
+        !localStorage.getItem("authorization")
+      ) {
+        next("/");
       }
-      break
+      break;
   }
 
   next();
