@@ -44,7 +44,7 @@
 <script>
 export default {
   name: "transfer",
-  props: ['holder'],
+  props: ["holder"],
   data() {
     return {
       amount: 0.0,
@@ -52,9 +52,9 @@ export default {
       error: false,
       success: false,
       money: {
-        decimal: ',',
-        thousands: '.',
-        prefix: 'R$ ',
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
         precision: 2,
         masked: false
       }
@@ -68,14 +68,13 @@ export default {
 
       this.$http
         .post("/transfer", { amount, to: this.holder.id })
-        .then(response => {
+        .then(() => {
           this.loading = false;
           this.success = true;
 
-          this.$emit('reload');
+          this.$emit("reload");
         })
-        .catch(error => {
-          console.error(error);
+        .catch(() => {
           this.error = true;
           this.loading = false;
         });
