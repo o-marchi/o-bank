@@ -11,7 +11,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button">
+              <a class="button" @click.prevent="logout">
                 Sair
               </a>
             </div>
@@ -104,6 +104,13 @@ export default {
       transferModal: false,
       withdrawModal: false
     };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('user');
+      localStorage.removeItem('authorization');
+      this.$router.replace('/');
+    }
   }
 };
 </script>

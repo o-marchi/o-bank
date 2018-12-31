@@ -26,12 +26,12 @@
       </p>
     </section>
 
-    <b-modal :active.sync="signinModal" has-modal-card>
-      <signin v-bind="formProps"></signin>
+    <b-modal :active.sync="signinModal" has-modal-card width="350">
+      <signin></signin>
     </b-modal>
 
-    <b-modal :active.sync="signupModal" has-modal-card>
-      <signup v-bind="formProps"></signup>
+    <b-modal :active.sync="signupModal" has-modal-card width="350">
+      <signup></signup>
     </b-modal>
   </main>
 </template>

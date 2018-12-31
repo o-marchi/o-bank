@@ -5,7 +5,7 @@ import Account from "@/pages/Account.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -21,3 +21,22 @@ export default new Router({
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  switch (to.name) {
+    case "home":
+      if (localStorage.getItem("user") && localStorage.getItem("authorization")) {
+        next("/minhaconta")
+      }
+      break;
+    case "account":
+      if (!localStorage.getItem("user") || !localStorage.getItem("authorization")) {
+        next("/")
+      }
+      break
+  }
+
+  next();
+});
+
+export default router;
