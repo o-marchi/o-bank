@@ -72,8 +72,6 @@ export default {
         });
     },
     processLogin(response) {
-      console.log("Response", response);
-
       localStorage.setItem('user', JSON.stringify(response.data.data));
       localStorage.setItem('authorization', response.headers.authorization);
 
