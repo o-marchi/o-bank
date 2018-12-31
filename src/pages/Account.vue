@@ -162,7 +162,6 @@ export default {
           this.user = response.data.data;
           this.user.amount = this.user.amount / 100;
           localStorage.setItem("user", JSON.stringify(this.user));
-          localStorage.setItem("authorization", response.headers.authorization);
 
           this.errorAccount = false;
           this.loadingAccount = false;

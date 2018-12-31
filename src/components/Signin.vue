@@ -74,6 +74,7 @@ export default {
     processLogin(response) {
       localStorage.setItem("user", JSON.stringify(response.data.data));
       localStorage.setItem("authorization", response.headers.authorization);
+      this.$http.defaults.headers['Authorization'] = response.headers.authorization;
 
       this.$router.replace("/minhaconta");
       this.loading = false;
