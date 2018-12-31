@@ -53,18 +53,36 @@
 
           <section class="panel is-relative">
             <p class="panel-heading">
-              Extrato
+              Tranferências
             </p>
-            <div class="panel-block has-text-left" v-for="n in 10">
+            <div class="panel-block has-text-left" v-for="transaction in transactions">
               <div class="columns">
                 <div class="column">
-                  <span class="panel-icon has-text-primary">
-                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                  </span>
-                  Depósito de Katita
+
+                  <div v-if="user.id == transaction.from.id">
+                    <span class="panel-icon has-text-danger">
+                      <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    </span>
+                    
+                    <small>Tranferência para<br></small>
+                    <strong>{{ transaction.to.name }}</strong>
+                  </div>
+
+                  <div v-if="user.id == transaction.to.id">
+                    <span class="panel-icon has-text-primary">
+                      <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </span>
+
+                    <small>Depósito de<br></small>
+                    <strong>{{ transaction.from.name }}</strong>
+                  </div>
                 </div>
-                <div class="column is-one-quarter has-text-right has-text-weight-bold">
-                  R$ 500,00
+                <div class="column is-one-quarter">
+                  <money class="plain-text" :value="transaction.amount / 100" readonly="readonly" v-bind="money"></money>
+                </div>
+
+                <div class="column is-one-quarter has-text-right">
+                  <p>{{ moment(transaction.inserted_at).format("DD/MM/YYYY") }}</p>
                 </div>
               </div>
             </div>
@@ -106,6 +124,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Transfer from "@/components/Transfer.vue";
 import Withdraw from "@/components/Withdraw.vue";
 
@@ -119,6 +138,7 @@ export default {
       currentHolder: {},
       user: {},
       holders: [],
+      transactions: [],
       loadingUsers: true,
       loadingAccount: true,
       loadingTransactions: true,
@@ -150,6 +170,9 @@ export default {
     this.updatePage();
   },
   methods: {
+    moment(date) {
+      return moment(date);
+    },
     logout() {
       localStorage.removeItem("user");
       localStorage.removeItem("authorization");
@@ -158,7 +181,7 @@ export default {
     updatePage() {
       this.$http
         .get('/me')
-        .then(response  => {
+        .then(response => {
           this.user = response.data.data;
           this.user.amount = this.user.amount / 100;
           localStorage.setItem("user", JSON.stringify(this.user));
@@ -169,6 +192,18 @@ export default {
         .catch(error => {
           this.errorAccount = true;
           this.loadingAccount = false;
+        });
+
+      this.$http
+        .get('/my-transfers')
+        .then(response => {
+          this.transactions = response.data.data;
+          this.errorTransactions = false;
+          this.loadingTransactions = false;
+        })
+        .catch(error => {
+          this.errorTransactions = true;
+          this.loadingTransactions = false;
         });
     }
   }
