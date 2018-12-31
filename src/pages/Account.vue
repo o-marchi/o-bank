@@ -55,7 +55,7 @@
             <p class="panel-heading">
               Tranferências
             </p>
-            <div class="panel-block has-text-left" v-for="transaction in transactions">
+            <div class="panel-block has-text-left" v-bind:key="transaction.id" v-for="transaction in transactions">
               <div class="columns">
                 <div class="column">
 
@@ -94,7 +94,7 @@
           <h3 class="title is-5">Correntistas</h3>
 
           <div class="is-relative">
-            <section class="holder box has-text-left" v-for="holder in holders" v-if="holder.id !== user.id">
+            <section class="holder box has-text-left" v-bind:key="holder.id" v-for="holder in holders">
               <h5 class="is-uppercase">{{ holder.name }}</h5>
               <p><the-mask class="plain-text" readonly="readonly" :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
               <p>{{ holder.email }}</p>
@@ -146,9 +146,9 @@ export default {
       errorAccount: true,
       errorTransactions: true,
       money: {
-        decimal: ',',
-        thousands: '.',
-        prefix: 'R$ ',
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
         precision: 2,
         masked: false
       }
@@ -156,13 +156,14 @@ export default {
   },
   mounted: function() {
     this.$http
-      .get('/users')
-      .then(response  => {
-        this.holders = response.data.data;
+      .get("/users")
+      .then(response => {
+        const holders = response.data.data;
+        this.holders = holders.filter(item => item.id !== this.user.id);
+
         this.loadingUsers = false;
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
         this.holders = [];
         this.loadingUsers = false;
       });
@@ -180,7 +181,7 @@ export default {
     },
     updatePage() {
       this.$http
-        .get('/me')
+        .get("/me")
         .then(response => {
           this.user = response.data.data;
           this.user.amount = this.user.amount / 100;
@@ -189,19 +190,19 @@ export default {
           this.errorAccount = false;
           this.loadingAccount = false;
         })
-        .catch(error => {
+        .catch(() => {
           this.errorAccount = true;
           this.loadingAccount = false;
         });
 
       this.$http
-        .get('/my-transfers')
+        .get("/my-transfers")
         .then(response => {
           this.transactions = response.data.data;
           this.errorTransactions = false;
           this.loadingTransactions = false;
         })
-        .catch(error => {
+        .catch(() => {
           this.errorTransactions = true;
           this.loadingTransactions = false;
         });

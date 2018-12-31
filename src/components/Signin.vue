@@ -64,9 +64,8 @@ export default {
 
       this.$http
         .post("/login", { email: this.email, password: this.password })
-        .then(response  => this.processLogin(response))
-        .catch(error => {
-          console.error(error);
+        .then(response => this.processLogin(response))
+        .catch(() => {
           this.error = true;
           this.loading = false;
         });
@@ -74,7 +73,8 @@ export default {
     processLogin(response) {
       localStorage.setItem("user", JSON.stringify(response.data.data));
       localStorage.setItem("authorization", response.headers.authorization);
-      this.$http.defaults.headers['Authorization'] = response.headers.authorization;
+      this.$http.defaults.headers["Authorization"] =
+        response.headers.authorization;
 
       this.$router.replace("/minhaconta");
       this.loading = false;

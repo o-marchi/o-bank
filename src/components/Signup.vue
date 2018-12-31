@@ -60,8 +60,8 @@ export default {
       name: "",
       email: "",
       password: "",
-      cpf: "",
-    }
+      cpf: ""
+    };
   },
   methods: {
     submit() {
@@ -77,20 +77,20 @@ export default {
       };
 
       this.$http
-        .post('/users', body)
-        .then(response  => this.createUser(response ))
-        .catch(error => {
-          console.error(error);
+        .post("/users", body)
+        .then(response => this.createUser(response))
+        .catch(() => {
           this.error = true;
           this.loading = false;
         });
     },
     createUser(response) {
-      localStorage.setItem('user', JSON.stringify(response.data.data));
-      localStorage.setItem('authorization', response.headers.authorization);
-      this.$http.defaults.headers['Authorization'] = response.headers.authorization;
+      localStorage.setItem("user", JSON.stringify(response.data.data));
+      localStorage.setItem("authorization", response.headers.authorization);
+      this.$http.defaults.headers["Authorization"] =
+        response.headers.authorization;
 
-      this.$router.replace('/minhaconta');
+      this.$router.replace("/minhaconta");
       this.loading = false;
     }
   }
