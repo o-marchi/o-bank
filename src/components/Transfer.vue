@@ -4,7 +4,7 @@
 
       <section class="modal-card-body" v-if="!success">
         <div class="notification is-danger" v-if="error">
-          <button class="delete" @click="error = false"></button>
+          <button type="button" class="delete" @click="error = false"></button>
           Ocorreu um erro ao tranferir o dinheiro, tente novamente
         </div>
 
@@ -17,7 +17,7 @@
           <money class="input is-medium" placeholder="Valor" v-model="amount" v-bind="money"></money>
         </b-field>
 
-        <button class="button is-primary">Transferir</button>
+        <button class="button is-primary" type="submit">Transferir</button>
 
         <br>
 
@@ -31,7 +31,7 @@
           para <strong>{{ holder.name }}</strong>
         </div>
 
-        <button class="button is-primary" @click="$parent.close();">Fechar</button>
+        <button type="button" class="button is-primary" @click="$parent.close();">Fechar</button>
 
         <br>
 
