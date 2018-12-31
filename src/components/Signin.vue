@@ -63,8 +63,8 @@ export default {
       this.loading = true;
 
       this.$http
-        .post('/login', { "email": this.email, "password": this.password })
-        .then(response  => this.processLogin(response ))
+        .post("/login", { email: this.email, password: this.password })
+        .then(response  => this.processLogin(response))
         .catch(error => {
           console.error(error);
           this.error = true;
@@ -72,10 +72,10 @@ export default {
         });
     },
     processLogin(response) {
-      localStorage.setItem('user', JSON.stringify(response.data.data));
-      localStorage.setItem('authorization', response.headers.authorization);
+      localStorage.setItem("user", JSON.stringify(response.data.data));
+      localStorage.setItem("authorization", response.headers.authorization);
 
-      this.$router.replace('/minhaconta');
+      this.$router.replace("/minhaconta");
       this.loading = false;
     }
   }

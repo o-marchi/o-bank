@@ -23,7 +23,7 @@
     <section class="section">
       <div class="columns">
         <div class="column is-two-thirds">
-          <section class="account-info box has-text-left">
+          <section class="account-info box has-text-left is-relative">
             <h3 class="title is-5">Informações sobre minha conta</h3>
             <div class="columns">
               <div class="column is-one-fifth">
@@ -33,12 +33,12 @@
               </div>
               <div class="column">
                 <h5 class="is-uppercase">{{ user.name }}</h5>
-                <p><the-mask class="plain-text" readonly :value="user.cpf" type="text" :mask="'###.###.###-##'" /></p>
+                <p><the-mask class="plain-text" readonly="readonly" :value="user.cpf" type="text" :mask="'###.###.###-##'" /></p>
                 <p>{{ user.email }}</p>
                 <hr>
                 <p>Saldo:</p>
                 <h2 class="user-amount">
-                  <money v-model="user.amount" v-bind="money"></money>
+                  <money :value="user.amount" readonly="readonly" v-bind="money"></money>
                 </h2>
                 <div class="buttons">
                   <a class="button is-info" @click="withdrawModal = true">
@@ -47,9 +47,11 @@
                 </div>
               </div>
             </div>
+
+            <b-loading :is-full-page="false" :active.sync="loadingAccount"></b-loading>
           </section>
 
-          <section class="panel">
+          <section class="panel is-relative">
             <p class="panel-heading">
               Extrato
             </p>
@@ -66,19 +68,21 @@
                 </div>
               </div>
             </div>
+
+            <b-loading :is-full-page="false" :active.sync="loadingTransactions"></b-loading>
           </section>
         </div>
         <div class="column has-text-left holders">
           <h3 class="title is-5">Correntistas</h3>
 
-          <div style="position: relative;">
+          <div class="is-relative">
             <section class="holder box has-text-left" v-for="holder in holders" v-if="holder.id !== user.id">
               <h5 class="is-uppercase">{{ holder.name }}</h5>
-              <p><the-mask class="plain-text" readonly :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
+              <p><the-mask class="plain-text" readonly="readonly" :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
               <p>{{ holder.email }}</p>
               <hr>
               <div class="buttons">
-                <a class="button is-small is-info" @click="transferModal = true">
+                <a class="button is-small is-info" @click="currentHolder = holder; transferModal = true">
                   Transferir
                 </a>
               </div>
@@ -92,11 +96,11 @@
     </section>
 
     <b-modal :active.sync="transferModal" has-modal-card>
-      <transfer></transfer>
+      <transfer v-on:reload="updatePage()" :holder="currentHolder"></transfer>
     </b-modal>
     
     <b-modal :active.sync="withdrawModal" has-modal-card>
-      <withdraw></withdraw>
+      <withdraw v-on:reload="updatePage()"></withdraw>
     </b-modal>
   </main>
 </template>
@@ -112,9 +116,15 @@ export default {
     return {
       transferModal: false,
       withdrawModal: false,
+      currentHolder: {},
       user: {},
       holders: [],
       loadingUsers: true,
+      loadingAccount: true,
+      loadingTransactions: true,
+      errorUsers: true,
+      errorAccount: true,
+      errorTransactions: true,
       money: {
         decimal: ',',
         thousands: '.',
@@ -125,9 +135,6 @@ export default {
     };
   },
   mounted: function() {
-    this.user = JSON.parse(localStorage.getItem("user"));
-    this.user.amount = this.user.amount / 100;
-
     this.$http
       .get('/users')
       .then(response  => {
@@ -139,12 +146,31 @@ export default {
         this.holders = [];
         this.loadingUsers = false;
       });
+
+    this.updatePage();
   },
   methods: {
     logout() {
       localStorage.removeItem("user");
       localStorage.removeItem("authorization");
       this.$router.replace("/");
+    },
+    updatePage() {
+      this.$http
+        .get('/me')
+        .then(response  => {
+          this.user = response.data.data;
+          this.user.amount = this.user.amount / 100;
+          localStorage.setItem("user", JSON.stringify(this.user));
+          localStorage.setItem("authorization", response.headers.authorization);
+
+          this.errorAccount = false;
+          this.loadingAccount = false;
+        })
+        .catch(error => {
+          this.errorAccount = true;
+          this.loadingAccount = false;
+        });
     }
   }
 };

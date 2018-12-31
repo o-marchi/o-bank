@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Axios from "axios";
-import VueTheMask from 'vue-the-mask';
-import VMoney from 'v-money';
+import VueTheMask from "vue-the-mask";
+import VMoney from "v-money";
 import Buefy from "buefy";
 
 import App from "./App.vue";
@@ -10,7 +10,7 @@ import router from "./router";
 import "@/assets/styles/main.scss";
 
 Vue.use(VueTheMask);
-Vue.use(VMoney, {precision: 4});
+Vue.use(VMoney, { precision: 4 });
 Vue.use(Buefy);
 
 const authorization = localStorage.getItem("authorization");
