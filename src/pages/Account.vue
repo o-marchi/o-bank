@@ -32,11 +32,14 @@
                 </span>
               </div>
               <div class="column">
-                <h5>ONELIO DE MARCHI JUNIOR</h5>
-                <p>oneliojr@gmail.com</p>
+                <h5 class="is-uppercase">{{ user.name }}</h5>
+                <p><the-mask class="plain-text" readonly :value="user.cpf" type="text" :mask="'###.###.###-##'" /></p>
+                <p>{{ user.email }}</p>
                 <hr>
                 <p>Saldo:</p>
-                <h2>R$ 1.000,00</h2>
+                <h2 class="user-amount">
+                  <money v-model="user.amount" v-bind="money"></money>
+                </h2>
                 <div class="buttons">
                   <a class="button is-info" @click="withdrawModal = true">
                   Sacar
@@ -68,16 +71,22 @@
         <div class="column has-text-left holders">
           <h3 class="title is-5">Correntistas</h3>
 
-          <section class="holder box has-text-left" v-for="n in 5">
-            <h5>ONELIO DE MARCHI JUNIOR</h5>
-            <p>oneliojr@gmail.com</p>
-            <hr>
-            <div class="buttons">
-              <a class="button is-small is-info" @click="transferModal = true">
-                Transferir
-              </a>
-            </div>
-          </section>
+          <div style="position: relative;">
+            <section class="holder box has-text-left" v-for="holder in holders" v-if="holder.id !== user.id">
+              <h5 class="is-uppercase">{{ holder.name }}</h5>
+              <p><the-mask class="plain-text" readonly :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
+              <p>{{ holder.email }}</p>
+              <hr>
+              <div class="buttons">
+                <a class="button is-small is-info" @click="transferModal = true">
+                  Transferir
+                </a>
+              </div>
+            </section>
+
+            <b-loading :is-full-page="false" :active.sync="loadingUsers"></b-loading>
+          </div>
+
         </div>
       </div>
     </section>
@@ -102,14 +111,40 @@ export default {
   data() {
     return {
       transferModal: false,
-      withdrawModal: false
+      withdrawModal: false,
+      user: {},
+      holders: [],
+      loadingUsers: true,
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        precision: 2,
+        masked: false
+      }
     };
+  },
+  mounted: function() {
+    this.user = JSON.parse(localStorage.getItem("user"));
+    this.user.amount = this.user.amount / 100;
+
+    this.$http
+      .get('/users')
+      .then(response  => {
+        this.holders = response.data.data;
+        this.loadingUsers = false;
+      })
+      .catch(error => {
+        console.error(error);
+        this.holders = [];
+        this.loadingUsers = false;
+      });
   },
   methods: {
     logout() {
-      localStorage.removeItem('user');
-      localStorage.removeItem('authorization');
-      this.$router.replace('/');
+      localStorage.removeItem("user");
+      localStorage.removeItem("authorization");
+      this.$router.replace("/");
     }
   }
 };

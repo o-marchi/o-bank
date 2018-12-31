@@ -1,5 +1,7 @@
 import Vue from "vue";
-import axios from "axios";
+import Axios from "axios";
+import VueTheMask from 'vue-the-mask';
+import VMoney from 'v-money';
 import Buefy from "buefy";
 
 import App from "./App.vue";
@@ -7,17 +9,19 @@ import router from "./router";
 
 import "@/assets/styles/main.scss";
 
+Vue.use(VueTheMask);
+Vue.use(VMoney, {precision: 4});
 Vue.use(Buefy);
 
-const token = localStorage.getItem("authorization");
+const authorization = localStorage.getItem("authorization");
 
-Vue.prototype.$http = axios.create({
+Vue.prototype.$http = Axios.create({
   baseURL: process.env.API_URL || "http://localhost:4000",
   headers: {
-  	"Accept": "application/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
-    "Authorization": token ? `Bearer ${localStorage.token}` : ""
+    Authorization: authorization
   }
 });
 

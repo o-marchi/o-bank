@@ -52,8 +52,8 @@ export default {
   name: "signin",
   data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       error: false,
       loading: false
     };
@@ -74,7 +74,7 @@ export default {
     processLogin(response) {
       console.log("Response", response);
 
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem('user', JSON.stringify(response.data.data));
       localStorage.setItem('authorization', response.headers.authorization);
 
       this.$router.replace('/minhaconta');
