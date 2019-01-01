@@ -1,7 +1,6 @@
 # O Bank Website
 
-[logo]: http://159.89.149.118/logo-green.png
-![alt-style][logo]
+![alt-text](https://raw.githubusercontent.com/o-marchi/o-bank/master/src/assets/logo-green.png)
 ---
 
 
