@@ -46,7 +46,7 @@
       
       <footer class="modal-card-foot">
           <button class="button" type="button" @click="$parent.close()">Cancelar</button>
-          <button class="button is-primary">Se cadastrar</button>
+          <button class="button is-primary" type="submit">Se cadastrar</button>
       </footer>
     </div>
   </form>

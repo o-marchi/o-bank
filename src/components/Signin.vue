@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="login">
-    <div class="modal-card">
+    <div class="modal-card" style="width: 350px;">
       <header class="modal-card-head">
         <p class="modal-card-title">Login</p>
       </header>
@@ -8,7 +8,7 @@
       <section class="modal-card-body">
 
         <div class="notification is-danger" v-if="error">
-          <button class="delete" @click="error = false"></button>
+          <button type="button" class="delete" @click="error = false"></button>
           Ocorreu um erro no login, tente novamente
         </div>
 
@@ -34,12 +34,11 @@
         </b-field>
 
         <br>
-
       </section>
       
       <footer class="modal-card-foot">
           <button class="button" type="button" @click="$parent.close()">Cancelar</button>
-          <button class="button is-primary">Login</button>
+          <button class="button is-primary" type="submit">Login</button>
       </footer>
 
       <b-loading :is-full-page="false" :active.sync="loading"></b-loading>
