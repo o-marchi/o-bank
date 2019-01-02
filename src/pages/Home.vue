@@ -26,11 +26,11 @@
       </p>
     </section>
 
-    <b-modal :active.sync="signinModal" has-modal-card width="350">
+    <b-modal :active.sync="signinModal" has-modal-card :width="350">
       <signin></signin>
     </b-modal>
 
-    <b-modal :active.sync="signupModal" has-modal-card width="350">
+    <b-modal :active.sync="signupModal" has-modal-card :width="350">
       <signup></signup>
     </b-modal>
   </main>

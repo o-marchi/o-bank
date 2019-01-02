@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="login">
-    <div class="modal-card" style="width: 350px;">
+    <div class="modal-card" style="max-width: 100%">
       <header class="modal-card-head">
         <p class="modal-card-title">Login</p>
       </header>
