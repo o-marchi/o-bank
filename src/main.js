@@ -16,7 +16,7 @@ Vue.use(Buefy);
 const authorization = localStorage.getItem("authorization");
 
 Vue.prototype.$http = Axios.create({
-  baseURL: process.env.API_URL || "https://obank.tk:4000/",
+  baseURL: process.env.API_URL || "https://obank.tk/api/",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
