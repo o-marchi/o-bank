@@ -9,7 +9,7 @@
 ---
 
 You can visit the website on this link:
-[http://159.89.149.118/](http://159.89.149.118/).
+[https://obank.tk/](https://obank.tk/).
 
 ### Running the project
 
