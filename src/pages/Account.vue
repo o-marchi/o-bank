@@ -94,17 +94,19 @@
           <h3 class="title is-5">Correntistas</h3>
 
           <div class="is-relative">
-            <section class="holder box has-text-left" v-bind:key="holder.id" v-for="holder in holders">
-              <h5 class="is-uppercase">{{ holder.name }}</h5>
-              <p><the-mask class="plain-text" readonly="readonly" :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
-              <p>{{ holder.email }}</p>
-              <hr>
-              <div class="buttons">
-                <a class="button is-small is-info" @click="currentHolder = holder; transferModal = true">
-                  Transferir
-                </a>
-              </div>
-            </section>
+            <div v-for="holder in holders">
+             <section class="holder box has-text-left"  v-if="holder.id != user.id">
+               <h5 class="is-uppercase">{{ holder.name }}</h5>
+               <p><the-mask class="plain-text" readonly="readonly" :value="holder.cpf" type="text" :mask="'###.###.###-##'" /></p>
+               <p>{{ holder.email }}</p>
+               <hr>
+               <div class="buttons">
+                 <a class="button is-small is-info" @click="currentHolder = holder; transferModal = true">
+                   Transferir
+                 </a>
+               </div>
+             </section> 
+            </div>
 
             <b-loading :is-full-page="false" :active.sync="loadingUsers"></b-loading>
           </div>
@@ -158,9 +160,7 @@ export default {
     this.$http
       .get("/users")
       .then(response => {
-        const holders = response.data.data;
-        this.holders = holders.filter(item => item.id !== this.user.id);
-
+        this.holders = response.data.data;
         this.loadingUsers = false;
       })
       .catch(() => {
